@@ -1,5 +1,6 @@
 const db = require('../config/db');
 
+// Obtener todos los préstamos
 const getPrestamos = async (req, res) => {
     try {
         const [prestamos] = await db.query('SELECT * FROM Prestamos');
@@ -44,4 +45,24 @@ const updatePrestamo = async (req, res) => {
     }
 };
 
-module.exports = { getPrestamos, createPrestamo, updatePrestamo };
+// Eliminar un préstamo
+const deletePrestamo = async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        const [result] = await db.query(
+            'DELETE FROM Prestamos WHERE id = ?',
+            [id]
+        );
+
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ message: 'Préstamo no encontrado' });
+        }
+
+        res.status(200).json({ message: 'Préstamo eliminado exitosamente' });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+module.exports = { getPrestamos, createPrestamo, updatePrestamo, deletePrestamo };

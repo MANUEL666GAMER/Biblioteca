@@ -45,5 +45,24 @@ const updateUsuario = async (req, res) => {
     }
 };
 
-module.exports = { getUsuarios, createUsuario, updateUsuario };
+// Eliminar un usuario
+const deleteUsuario = async (req, res) => {
+    const { id } = req.params;
 
+    try {
+        const [result] = await db.query(
+            'DELETE FROM Usuarios WHERE id = ?',
+            [id]
+        );
+
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ message: 'Usuario no encontrado' });
+        }
+
+        res.status(200).json({ message: 'Usuario eliminado exitosamente' });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+module.exports = { getUsuarios, createUsuario, updateUsuario, deleteUsuario };
