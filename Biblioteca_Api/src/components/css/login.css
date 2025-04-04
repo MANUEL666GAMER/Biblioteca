@@ -1,0 +1,123 @@
+/* Fuente personalizada */
+@import url("https://fonts.googleapis.com/css?family=Nunito&display=swap");
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Nunito", sans-serif;
+  background: url(../imagenes/fondo.jpg) no-repeat center center;
+  background-size: cover;
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Contenedor principal */
+#contenedor {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+/* Contenedor centrado */
+#contenedorcentrado {
+  display: flex;
+  background: white;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+  max-width: 600px;
+}
+
+/* Sección del formulario */
+#login {
+  padding: 20px;
+  flex: 1;
+}
+
+#loginform label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+#loginform input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
+/* Botón de login */
+button {
+  width: 100%;
+  background: #4b79a1;
+  color: white;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #283e51;
+}
+
+/* Panel derecho */
+#derecho {
+  background: #4b79a1;
+  color: white;
+  padding: 20px;
+  flex: 1;
+  text-align: center;
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
+
+/* Texto del panel derecho */
+#derecho .titulo {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.pie-form {
+  margin-top: 20px;
+}
+
+.pie-form a {
+  display: block;
+  color: white;
+  text-decoration: none;
+  margin-top: 10px;
+}
+
+.pie-form a:hover {
+  text-decoration: underline;
+}
+
+/* Mensaje de error */
+.error-message {
+  color: red;
+  font-size: 14px;
+  margin-bottom: 10px;
+}
+
+.pie-form img {
+  width: 120px; /* Ajusta el tamaño de la imagen */
+  height: auto;
+  display: block;
+  margin: 10px auto; /* Centra la imagen */
+  border-radius: 10px; /* Opcional: bordes redondeados */
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.3); /* Sombra para mejor visibilidad */
+}
+

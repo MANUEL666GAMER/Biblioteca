@@ -1,81 +1,211 @@
 const db = require('../config/db'); // Importa la conexión a la base de datos
 
-// Obtener todos los usuarios
+/**
+ * @swagger
+ * tags:
+ *   name: Usuarios
+ *   description: Endpoints para gestionar los usuarios en la biblioteca
+ */
+
+/**
+ * @swagger
+ * /usuarios:
+ *   get:
+ *     summary: Obtener todos los usuarios
+ *     tags: [Usuarios]
+ *     description: Retorna la lista de todos los usuarios en la base de datos.
+ *     security: [{ bearerAuth: [] }]
+ *     responses:
+ *       200:
+ *         description: Lista de usuarios obtenida exitosamente
+ *       500:
+ *         description: Error en el servidor
+ */
 const getUsuarios = async (req, res) => {
     try {
-        // Consulta a la base de datos para obtener todos los usuarios
-        const [usuarios] = await db.query('SELECT * FROM Usuarios');
-        res.json(usuarios); // Responde con los datos en formato JSON
+        const [usuarios] = await db.query('SELECT * FROM usuarios');
+        res.json(usuarios);
     } catch (error) {
-        res.status(500).json({ message: error.message }); // Manejo de errores
+        res.status(500).json({ message: error.message });
     }
 };
 
-// Crear un usuario
+/**
+ * @swagger
+ * /usuarios:
+ *   post:
+ *     summary: Crear un nuevo usuario
+ *     tags: [Usuarios]
+ *     description: Agrega un nuevo usuario a la base de datos.
+ *     security: [{ bearerAuth: [] }]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               Nombre:
+ *                 type: string
+ *               Apellido:
+ *                 type: string
+ *               Email:
+ *                 type: string
+ *               Telefono:
+ *                 type: string
+ *               Direccion:
+ *                 type: string
+ *     responses:
+ *       201:
+ *         description: Usuario creado exitosamente
+ *       500:
+ *         description: Error en el servidor
+ */
 const createUsuario = async (req, res) => {
-    // Extrae los datos del usuario desde el cuerpo de la solicitud
     const { Nombre, Apellido, Email, Telefono, Direccion } = req.body;
 
     try {
-        // Inserta un nuevo usuario en la base de datos
         const [result] = await db.query(
-            'INSERT INTO Usuarios (Nombre, Apellido, Email, Telefono, Direccion) VALUES (?, ?, ?, ?, ?)',
+            'INSERT INTO usuarios (Nombre, Apellido, Email, Telefono, Direccion) VALUES (?, ?, ?, ?, ?)',
             [Nombre, Apellido, Email, Telefono, Direccion]
         );
-
-        // Devuelve la respuesta con el ID del nuevo usuario creado
         res.status(201).json({ id: result.insertId, ...req.body });
     } catch (error) {
-        res.status(500).json({ message: error.message }); // Manejo de errores
+        res.status(500).json({ message: error.message });
     }
 };
 
-// Actualizar un usuario
+/**
+ * @swagger
+ * /usuarios/{id}:
+ *   put:
+ *     summary: Actualizar un usuario
+ *     tags: [Usuarios] 
+ *     description: Modifica un usuario existente en la base de datos.
+ *     security: [{ bearerAuth: [] }]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               Nombre:
+ *                 type: string
+ *               Apellido:
+ *                 type: string
+ *               Email:
+ *                 type: string
+ *               Telefono:
+ *                 type: string
+ *               Direccion:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Usuario actualizado exitosamente
+ *       404:
+ *         description: Usuario no encontrado
+ *       500:
+ *         description: Error en el servidor
+ */
 const updateUsuario = async (req, res) => {
-    const { id } = req.params; // Obtiene el ID del usuario desde los parámetros de la URL
-    const { Nombre, Apellido, Email, Telefono, Direccion } = req.body; // Obtiene los nuevos datos del usuario
+    const { id } = req.params;
+    const { Nombre, Apellido, Email, Telefono, Direccion } = req.body;
 
     try {
-        // Actualiza los datos del usuario en la base de datos
         const [result] = await db.query(
-            'UPDATE Usuarios SET Nombre = ?, Apellido = ?, Email = ?, Telefono = ?, Direccion = ? WHERE id = ?',
+            'UPDATE usuarios SET Nombre = ?, Apellido = ?, Email = ?, Telefono = ?, Direccion = ? WHERE UsuarioID = ?',
             [Nombre, Apellido, Email, Telefono, Direccion, id]
         );
-
-        // Verifica si el usuario fue encontrado y actualizado
         if (result.affectedRows === 0) {
             return res.status(404).json({ message: 'Usuario no encontrado' });
         }
-
-        // Devuelve la respuesta con los datos actualizados del usuario
         res.json({ id, Nombre, Apellido, Email, Telefono, Direccion });
     } catch (error) {
-        res.status(500).json({ message: error.message }); // Manejo de errores
+        res.status(500).json({ message: error.message });
     }
 };
 
-// Eliminar un usuario
+/**
+ * @swagger
+ * /usuarios/{id}:
+ *   delete:
+ *     summary: Eliminar un usuario
+ *     tags: [Usuarios]
+ *     description: Borra un usuario de la base de datos.
+ *     security: [{ bearerAuth: [] }]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Usuario eliminado exitosamente
+ *       404:
+ *         description: Usuario no encontrado
+ *       500:
+ *         description: Error en el servidor
+ */
 const deleteUsuario = async (req, res) => {
-    const { id } = req.params; // Obtiene el ID del usuario desde los parámetros de la URL
-
+    const { id } = req.params;
     try {
-        // Ejecuta la consulta para eliminar el usuario de la base de datos
         const [result] = await db.query(
-            'DELETE FROM Usuarios WHERE id = ?',
+            'DELETE FROM usuarios WHERE `usuarios`.`UsuarioID` = ?',
             [id]
         );
-
-        // Verifica si el usuario fue encontrado y eliminado
         if (result.affectedRows === 0) {
             return res.status(404).json({ message: 'Usuario no encontrado' });
         }
-
-        // Devuelve la respuesta confirmando la eliminación del usuario
         res.status(200).json({ message: 'Usuario eliminado exitosamente' });
     } catch (error) {
-        res.status(500).json({ message: error.message }); // Manejo de errores
+        res.status(500).json({ message: error.message });
     }
 };
 
-// Exporta las funciones para su uso en las rutas
-module.exports = { getUsuarios, createUsuario, updateUsuario, deleteUsuario };
+/**
+ * @swagger
+ * /usuarios/{id}:
+ *   get:
+ *     summary: Obtener un usuario por ID
+ *     tags: [Usuarios]
+ *     description: Retorna los detalles de un usuario específico de la base de datos, utilizando el ID del usuario.
+ *     security: [{ bearerAuth: [] }]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Usuario obtenido exitosamente
+ *       404:
+ *         description: Usuario no encontrado
+ *       500:
+ *         description: Error en el servidor
+ */
+const getUsuarioById = async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        const [usuario] = await db.query('SELECT * FROM usuarios WHERE UsuarioID = ?', [id]);
+
+        if (usuario.length === 0) {
+            return res.status(404).json({ message: 'Usuario no encontrado' });
+        }
+
+        res.json(usuario[0]);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+module.exports = { getUsuarios, createUsuario, updateUsuario, deleteUsuario, getUsuarioById };

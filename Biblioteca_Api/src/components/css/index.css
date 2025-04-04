@@ -1,0 +1,77 @@
+  
+  /* Contenedor principal */
+  .dashboard-container {
+    display: flex;
+    min-height: 100vh;  /* Asegura que ocupe toda la pantalla */
+  }
+  
+  /* Sidebar */
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 250px;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);  /* Fondo semi-transparente */
+    color: white;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .sidebar .logo-image {
+    width: 100px;
+    height: auto;
+    margin-bottom: 20px;
+  }
+  
+  .sidebar-links {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+  }
+  
+  .sidebar-links li {
+    margin: 15px 0;
+    text-align: center;
+  }
+  
+  .sidebar-links li a {
+    color: white;
+    text-decoration: none;
+    font-size: 18px;
+    display: block;
+    padding: 10px;
+  }
+  
+  .sidebar-links li a:hover {
+    background-color: #555;
+  }
+  
+  /* Área de contenido principal */
+  .main-content {
+    margin-left: 250px;  /* Asegura que el contenido no se superponga con el sidebar */
+    padding: 20px;
+    flex-grow: 1;
+  }
+  
+  /* Aseguramos que el diseño sea responsivo */
+  @media (max-width: 768px) {
+    .dashboard-container {
+      flex-direction: column;
+    }
+  
+    .sidebar {
+      width: 100%;
+      height: auto;
+      position: relative;
+    }
+  
+    .main-content {
+      margin-left: 0;
+    }
+  }
+  
+
